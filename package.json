@@ -1,0 +1,26 @@
+{
+    "name": "bamazon",
+    "version": "1.0.0",
+    "description": "Storefront command line application",
+    "main": "bamazonCustomer.js",
+    "dependencies": {
+        "dotenv": "^5.0.1",
+        "easy-table": "^1.1.1",
+        "inquirer": "^5.2.0",
+        "mysql": "^2.15.0"
+    },
+    "devDependencies": {},
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/samsonmarikwa/bamazon.git"
+    },
+    "author": "Samson M",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/samsonmarikwa/bamazon/issues"
+    },
+    "homepage": "https://github.com/samsonmarikwa/bamazon#readme"
+}
