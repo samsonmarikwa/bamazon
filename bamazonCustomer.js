@@ -17,13 +17,29 @@ var connection = mysql.createConnection({
 connection.connect(function(err) {
     if (err) throw err;
     // run the function to access data
-    displayItems(true, "");
+
+    viewProducts(true, "", "all");
+
 });
 
-var displayItems = function(buying, ItemCode) {
+
+/*
+ * view products
+ * -- Parameters --
+ * buying   - will determine if askProduct to buy will run. In some instances, we just
+ *            want to run the function to display products without buying them.
+ * itemCode - determines the item_id to be selected in the database SELECT statement.
+ *            We need this to run the viewProducts to display the item that was updated.
+ * productRange - low executes viewProducts for those that are below the quanity of 5
+ */
+var viewProducts = function(buying, itemCode, productRange) {
 
     // construct a SQL statement for SELECT
-    var stmt = "SELECT * FROM products WHERE item_id LIKE '" + ItemCode + "%'";
+    if (productRange === "low") {
+        var stmt = "SELECT * FROM products AS p, departments AS d WHERE stock_quantity < 5 AND p.dept_id = d.dept_id";
+    } else {
+        var stmt = "SELECT * FROM products AS p, departments AS d WHERE item_id LIKE '" + itemCode + "%' AND p.dept_id = d.dept_id";
+    }
 
     connection.query(stmt, function(err, results) {
 
@@ -32,26 +48,29 @@ var displayItems = function(buying, ItemCode) {
 
         // create table instance to print
         var tab = new table;
+        console.log("\n\nProducts List\n");
 
         // populate table with data from the query result
         for (var x = 0; x < results.length; x++) {
             tab.cell("Item Code", results[x].item_id);
             tab.cell("Description", results[x].product_name);
-            tab.cell("Dept. Name", results[x].department_name);
+            tab.cell("Department Name", results[x].dept_name);
             tab.cell("Price", results[x].price, table.number(2));
             tab.cell("Quantity", results[x].stock_quantity, table.number(3));
             tab.newRow();
         }
 
         console.log(tab.toString());
-        console.log("\n\n");
+        console.log("\n\n--- End of Report ---\n\n");
 
         if (buying) {
             askProductToBuy();
         }
 
     });
+
 }
+
 
 var askProductToBuy = function() {
 
@@ -73,10 +92,12 @@ var askProductToBuy = function() {
         if (answers.selection.toUpperCase() != "X") {
             askProductQty(answers.selection);
         } else {
-            console.log("\n");
+            console.log("\n\nExiting\n");
+            connection.end();
         }
     });
 }
+
 
 var askProductQty = function(itemCode) {
 
@@ -98,6 +119,7 @@ var askProductQty = function(itemCode) {
     });
 }
 
+
 var placeOrder = function(item, qty) {
     // first check if item quantity can satisfy order
     connection.query("SELECT * FROM products WHERE ?", [{
@@ -106,22 +128,27 @@ var placeOrder = function(item, qty) {
         if (err) throw err;
 
         var updateQty = 0;
+        var unitPrice = 0;
+        var productSales = 0;
 
         if (results.length > 0) {
 
             for (var x = 0; x < results.length; x++) {
                 updateQty = results[x].stock_quantity;
+                unitPrice = results[x].price;
+                productSales = results[x].product_sales;
             }
 
             if (updateQty >= qty) {
                 connection.query("UPDATE products SET ? WHERE ?", [{
-                    stock_quantity: updateQty - qty
+                    stock_quantity: updateQty - qty,
+                    product_sales: productSales + (qty * unitPrice)
                 }, {
                     item_id: item
                 }], function(err, res) {
                     if (err) throw err;
                     console.log("\n" + res.affectedRows + " product(s) updated!\n\n");
-                    displayItems(false, item);
+                    viewProducts(true, item, "all");
                 });
             } else {
                 console.log("\nInsufficient quantity available!\n\n");
@@ -130,8 +157,10 @@ var placeOrder = function(item, qty) {
         } else {
             console.log("\nProduct Code: " + item + " Not Found!\n\n");
         }
+
     });
 }
+
 
 // function checks if the parameter is a number
 var isNumeric = function(num) {

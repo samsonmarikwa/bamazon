@@ -8,26 +8,49 @@ CREATE DATABASE bamazon;
 -- Use the database before any operations can take place
 USE bamazon;
 
+-- delete the table if it exists
+DROP TABLE IF EXISTS departments;
+
+-- create the table
+CREATE TABLE departments(
+	dept_id INT(3) NOT NULL AUTO_INCREMENT,
+    dept_name VARCHAR(20) NOT NULL,
+    over_head_costs DECIMAL(8,2),
+    PRIMARY KEY(dept_id))
+    AUTO_INCREMENT=100;
+
+-- populate the table with initial data
+INSERT INTO departments(dept_name,over_head_costs)
+VALUES("Stationery",1000.00),
+		("Hardware",1500),
+        ("Electronics",1250.55),
+        ("Clothing and Shoes",780.99);
+
+-- delete table if it exists
+DROP TABLE IF EXISTS products;
+
 -- Create the products table with item_id as a primary key
 -- Primary key is auto-incrementing starting from 1000
 CREATE TABLE products(
 	item_id INT NOT NULL AUTO_INCREMENT,
     product_name VARCHAR(30) NOT NULL,
-    department_name VARCHAR(30) NOT NULL,
-    price INTEGER(10),
+    dept_id INT(3) NOT NULL REFERENCES departments(dept_id),
+    price DECIMAL(8,2),
     stock_quantity INTEGER(5),
+    product_sales DECIMAL(8,2),
     PRIMARY KEY (item_id))
     AUTO_INCREMENT=1000;
-
+    
 -- Insert data into the table
-INSERT INTO products (product_name, department_name, price, stock_quantity)
-VALUES("Copy & Print Paper","Stationery",5.00,20),
-	("Keyboard and mouse","Hardware",15.00,15),
-    ("Apple Laptop","Hardware",800,10),
-    ("HP Laptop","Hardware",650,15),
-    ("HP Laser printer","Hardware",65,20),
-    ("Envelopes","Stationery",15.00,100),
-    ("Ink catridges","Stationery",35.00,20),
-    ("Laser catridges","Stationery",40.00,25),
-    ("Writing pads","Stationery",3.00,100),
-    ("Wirebound notebook","Stationery",3.50,90)
+INSERT INTO products (product_name, dept_id, price, stock_quantity)
+VALUES("Copy & Print Paper",100,5.00,20),
+	("Keyboard and mouse",101,15.00,15),
+    ("Apple Laptop",101,800,10),
+    ("HP Laptop",101,650,15),
+    ("HP Laser printer",101,65,20),
+    ("Envelopes",100,15.00,100),
+    ("Ink catridges",100,35.00,20),
+    ("Laser catridges",100,40.00,25),
+    ("Writing pads",100,3.00,100),
+    ("Wirebound notebook",100,3.50,90),
+    ("LG Smart TV",102,250.59,15);
