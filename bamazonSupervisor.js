@@ -1,6 +1,7 @@
+// load sensitive environmental data from .env file
 require('dotenv').config();
 
-var mysql = require("mysql"); // connect to mysql
+var mysql = require("mysql"); // load mysql driver
 // var ctable = require('console.table'); // to display well layout tabular console logs. Easy to use but does not allow formatting of columns.
 var table = require('easy-table'); // to display well layout tabular console logs
 var inquirer = require("inquirer");

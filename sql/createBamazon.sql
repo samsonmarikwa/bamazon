@@ -2,6 +2,7 @@
 --
 -- Delete the database if it exists
 DROP DATABASE IF EXISTS bamazon;
+
 -- Create the database
 CREATE DATABASE bamazon;
 
@@ -19,13 +20,6 @@ CREATE TABLE departments(
     PRIMARY KEY(dept_id))
     AUTO_INCREMENT=100;
 
--- populate the table with initial data
-INSERT INTO departments(dept_name,over_head_costs)
-VALUES("Stationery",1000.00),
-		("Hardware",1500),
-        ("Electronics",1250.55),
-        ("Clothing and Shoes",780.99);
-
 -- delete table if it exists
 DROP TABLE IF EXISTS products;
 
@@ -40,8 +34,20 @@ CREATE TABLE products(
     product_sales DECIMAL(8,2),
     PRIMARY KEY (item_id))
     AUTO_INCREMENT=1000;
+
+-- add a foreign key constraint to ensure only valid dept_id are created in the products table
+ALTER TABLE products
+ADD CONSTRAINT FK_ProductsDepartment
+FOREIGN KEY (dept_id) REFERENCES departments(dept_id);
+
+-- populate the Ddepartments table with initial data
+INSERT INTO departments(dept_name,over_head_costs)
+VALUES("Stationery",1000.00),
+		("Hardware",1500),
+        ("Electronics",1250.55),
+        ("Clothing and Shoes",780.99);
     
--- Insert data into the table
+-- Insert data into the products table
 INSERT INTO products (product_name, dept_id, price, stock_quantity)
 VALUES("Copy & Print Paper",100,5.00,20),
 	("Keyboard and mouse",101,15.00,15),

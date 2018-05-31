@@ -1,6 +1,7 @@
+// load sensitive environmental data from .env file
 require('dotenv').config();
 
-var mysql = require("mysql"); // connect to mysql
+var mysql = require("mysql"); // load mysql driver
 var table = require('easy-table'); // to display well layout tabular console logs
 var inquirer = require("inquirer");
 
@@ -202,7 +203,8 @@ var placeOrder = function(item, qty) {
             });
 
         } else {
-            console.log("\nProduct Code: " + item + " Not Found!\n\n");
+            console.log("\nProduct Code: " + item + " Not Found! Please enter an existing product.\n\n");
+            viewProducts(false, item, "all");
         }
     });
 }
@@ -248,7 +250,13 @@ var createProductRecord = function(name, dept, price) {
         dept_id: dept,
         price: price
     }, function(err, res) {
-        console.log("\n" + res.affectedRows + " product inserted!\n\n");
+        if (err) {
+            console.log("Error creating record! Invalid dept_id: " + dept);
+            console.log("\n" + err.sqlMessage + "\n\n");
+        } else {
+            console.log("\n" + res.affectedRows + " product inserted!\n\n");
+        }
+
         viewProducts(false, "", "all");
     });
 }

@@ -1,6 +1,8 @@
+// load sensitive environmental data from .env file
 require('dotenv').config();
 
-var mysql = require("mysql"); // connect to mysql
+// load mysql driver
+var mysql = require("mysql"); // load mysql driver
 var table = require('easy-table'); // to display well layout tabular console logs
 var inquirer = require("inquirer");
 
@@ -76,7 +78,7 @@ var askProductToBuy = function() {
 
     var questions = [{
         type: "input",
-        message: "Enter the product code you want to buy or X to Exit",
+        message: "Enter the product code you want to buy or X to Exit: ",
         name: "selection",
         validate: function(value) {
             if (value.toUpperCase() === "X" || (value >= "1000" && value <= "9999")) {
@@ -103,7 +105,7 @@ var askProductQty = function(itemCode) {
 
     var questions = [{
         type: "input",
-        message: "Enter quantity you want to buy",
+        message: "Enter quantity you want to buy: ",
         name: "quantity",
         validate: function(value) {
             if (isNumeric(value)) {
@@ -148,14 +150,16 @@ var placeOrder = function(item, qty) {
                 }], function(err, res) {
                     if (err) throw err;
                     console.log("\n" + res.affectedRows + " product(s) updated!\n\n");
-                    viewProducts(true, item, "all");
                 });
             } else {
                 console.log("\nInsufficient quantity available!\n\n");
+
             }
+            viewProducts(true, item, "all");
 
         } else {
-            console.log("\nProduct Code: " + item + " Not Found!\n\n");
+            console.log("\nProduct Code: " + item + " Not Found! Please re-enter an exisitng product code.\n\n");
+            viewProducts(true, "", "all");
         }
 
     });
