@@ -2,7 +2,7 @@
 
 
 ## Application description
-Bamazon Storefront is command line application that uses node.js and MySQL. Three programs make up the Bamazon application, which are bamazonCustomer.js, bamazonManager.js and bamazonSupervisor.js. Four packages were installed from npmjs namely dotenv to load environmental variables to the process.env object in node, MySQL which is MySQL driver for node.js, Easy-table which is a utility for rendering text tables with javascript and lastly the Inquirer package to provide a user interface and session flow for the user to interact with the application.
+Bamazon Storefront is a command line application that uses node.js and MySQL. Three programs make up the Bamazon application, which are bamazonCustomer.js, bamazonManager.js and bamazonSupervisor.js. Four packages were installed from npmjs namely dotenv to load environmental variables to the process.env object in node, MySQL which is the MySQL database driver for node.js, Easy-table which is a utility for rendering text tables with javascript and lastly the Inquirer package to provide a user interface and session flow for the user to interact with the application.
 
 
 ## Setup
@@ -19,7 +19,7 @@ The bamazonManager allows a manager to access the application to check on invent
 The bamazonSupervisor allows a supervisor to get a report on sales and to create new departments.
 
 
-## Using the application
-Further information on how to use the system is available on the link shown below.
+## Further information
+Further information on how to setup and use the system is available on 
 [Application Demo Videos](https://drive.google.com/drive/folders/1AvKI0r8PcrNBCIans32TF9Znfu0pP-Ht?usp=sharing)
 
